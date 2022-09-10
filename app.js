@@ -1,23 +1,66 @@
 // create board
+const gameBoard = document.getElementById('gamePlusScore'); // game field
+let newGameBoard = document.createElement('div'); // playing field
+const snakeColor = "lightblue"; // snake color
+
 
 function buildInitialState() {
     const siteBody = document.getElementsByName('body');
     const gameBoard = document.getElementById('gamePlusScore');
 
-    let newGameBoard = document.createElement('div');
+    const newGameBoard = document.createElement('div');
+    newGameBoard.style.border = "dashed";
+
+    let gameSize = {
+    xsmallGame: 300,
+    smallGame: 500, // has to be a string because of css (?)
+    mediumGame: 800, // is always a string if in an object
+    }
+    console.log('small game', gameSize.smallGame === '500');
+
+    newGameBoard.style.width = "500px"; // setting height / width of game board 
+    newGameBoard.style.height = "500px";
+ 
+    gameBoard.appendChild(newGameBoard);
     console.log(newGameBoard);
 
+    function createSnake() {
+        console.log('reading create snake');
+        // create an array (object? both?) which keeps track of the length of our snake
+    
+        //get the initial location of the snake head (middle of game field)
+        let boardCenterWidth = gameSize.smallGame / 2;
+        let boardCenterHeight = gameSize.smallGame / 2;
+        console.log("boardCenterHeight", gameSize.smallGame / 2);
+        console.log("boardCenterWidth", gameSize.smallGame / 2);
+        
 
-    newGameBoard.style.width = "500px";
-    newGameBoard.style.height = "500px";
-    newGameBoard.style.border = "dashed";
-    console.log('newboard style', newGameBoard.classList);
-    // newGameBoard.setAttribute("class", "small");
-    newGameBoard.innerText = 'this is where our snake game would live if it loaded with the right width and height';
-    console.log(gameBoard);
+        // take the boardCenterHeight and boardCenterWidth to use as coordinates
+            // use coordinates within game board?
 
-    gameBoard.appendChild(newGameBoard);
+        let snakeHead;
+        snakeHead.width = "4px";
+        snakeHead.height = "4px";
+        snakeHead.top = boardCenterHeight;
+        console.log(snakeHead);
 
+
+    
+        // create snake object
+        //    variable         x cord              y cord
+        // let snake = {
+        //     headPosition: [boardCenterHeight, boardCenterWidth,],
+        //     headWidth: [boardCenterHeight + 4, boardCenterWidth + 4],
+        //     snakeBody: [headPosition, headPosition(1) + 10],
+        // }
+
+
+        // the starting position of the head of the snake should be the center of the board
+        // snake should be an x amount height and width
+    
+    }
+
+    createSnake();
 }
 
 /*
@@ -28,6 +71,8 @@ inside that game board, do we want a bunch of smaller divs,
 
 
 */
+
+
 
 /*
 The snake
