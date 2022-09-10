@@ -2,13 +2,20 @@
 
 function buildInitialState() {
     const siteBody = document.getElementsByName('body');
-    const gameBoard = document.getElementById('gameboard');
+    const gameBoard = document.getElementById('gamePlusScore');
 
     let newGameBoard = document.createElement('div');
     console.log(newGameBoard);
-    newGameBoard.classList.add('small');
-    // newGameBoard.innerText = 'this is where our snake game would live if it loaded with the right width and height';
+
+
+    newGameBoard.style.width = "500px";
+    newGameBoard.style.height = "500px";
+    newGameBoard.style.border = "dashed";
+    console.log('newboard style', newGameBoard.classList);
+    // newGameBoard.setAttribute("class", "small");
+    newGameBoard.innerText = 'this is where our snake game would live if it loaded with the right width and height';
     console.log(gameBoard);
+
     gameBoard.appendChild(newGameBoard);
 
 }
