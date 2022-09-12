@@ -36,3 +36,9 @@
     height: 800px;
   }
 
+  main div {
+    display: flex;
+    flex-wrap: wrap;
+    height: 5px;
+    width: 5px;
+  }
