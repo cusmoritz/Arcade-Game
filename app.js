@@ -10,34 +10,37 @@ let game = {
     }
 
     let gameBoard = {
-        1: [1,2,3,4,5,6,7,8,9,10],
-        2: [1,2,3,4,5,6,7,8,9,10],
-        3: [1,2,3,4,5,6,7,8,9,10],
-        4: [1,2,3,4,5,6,7,8,9,10],
-        5: [1,2,3,4,5,6,7,8,9,10],
-        6: [1,2,3,4,5,6,7,8,9,10],
-        7: [1,2,3,4,5,6,7,8,9,10],
-        8: [1,2,3,4,5,6,7,8,9,10],
-        9: [1,2,3,4,5,6,7,8,9,10],
-        10: [1,2,3,4,5,6,7,8,9,10]
+    //     1: [1,2,3,4,5,6,7,8,9,10],
+    //     2: [1,2,3,4,5,6,7,8,9,10],
+    //     3: [1,2,3,4,5,6,7,8,9,10],
+    //     4: [1,2,3,4,5,6,7,8,9,10],
+    //     5: [1,2,3,4,5,6,7,8,9,10],
+    //     6: [1,2,3,4,5,6,7,8,9,10],
+    //     7: [1,2,3,4,5,6,7,8,9,10],
+    //     8: [1,2,3,4,5,6,7,8,9,10],
+    //     9: [1,2,3,4,5,6,7,8,9,10],
+    //     10: [1,2,3,4,5,6,7,8,9,10]
     }
 
 
 function buildInitialState() {
     gameLayout.appendChild(newGameBoard);
 
-    // create 20 rows with 10 cells each
+    // create 20 rows with 20 cells each
 
-    for (let rowsInTable = 0; rowsInTable < 20; rowsInTable++){
+    for (let rowsInTable = 1; rowsInTable < 21; rowsInTable++){
         let newRow = document.createElement('tr');
         // gameBoard[rowsInTable] = rowsInTable;
 
-        for (let cellsInRow = 0; cellsInRow < 20; cellsInRow++){
+        for (let cellsInRow = 1; cellsInRow < 21; cellsInRow++){
             let newCell = document.createElement('td');
+
+            Object.values(rowsInTable) = newCell;
+            // gameBoard[rowsInTable] = newCell;
             
             newRow.appendChild(newCell);
             
-            gameBoard[rowsInTable] = cellsInRow;
+            // console.log(newCell.dataset.index);
         }
     newGameBoard.appendChild(newRow);
     }
