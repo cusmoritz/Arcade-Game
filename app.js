@@ -1,84 +1,53 @@
 // create board
 const siteBody = document.getElementsByName('body');
-const gameBoard = document.getElementById('gamePlusScore'); // game field
-let newGameBoard = document.createElement('div'); // playing field
+const gameLayout = document.getElementById('gamePlusScore'); // game field
+let newGameBoard = document.createElement('table'); // playing field
 
-let gameSize = {
+let game = {
     xsmallGame: 300,
     smallGame: 500, // has to be a string because of css (?)
     mediumGame: 800, // key is always a string if in an object
     }
 
+    let gameBoard = {
+        1: [1,2,3,4,5,6,7,8,9,10],
+        2: [1,2,3,4,5,6,7,8,9,10],
+        3: [1,2,3,4,5,6,7,8,9,10],
+        4: [1,2,3,4,5,6,7,8,9,10],
+        5: [1,2,3,4,5,6,7,8,9,10],
+        6: [1,2,3,4,5,6,7,8,9,10],
+        7: [1,2,3,4,5,6,7,8,9,10],
+        8: [1,2,3,4,5,6,7,8,9,10],
+        9: [1,2,3,4,5,6,7,8,9,10],
+        10: [1,2,3,4,5,6,7,8,9,10]
+    }
 
 
 function buildInitialState() {
+    gameLayout.appendChild(newGameBoard);
 
-    // const newGameBoard = document.createElement('div');
-    newGameBoard.style.border = "dashed";
-    newGameBoard.style.width = "500px"; // setting height / width of game board 
-    newGameBoard.style.height = "500px";
-    newGameBoard.style.display = "wrap";
-    
+    // create 20 rows with 10 cells each
 
+    for (let rowsInTable = 0; rowsInTable < 20; rowsInTable++){
+        let newRow = document.createElement('tr');
+        // gameBoard[rowsInTable] = rowsInTable;
 
-    for (i = 0; i < 380; i++){
-        let newCell = document.createElement('div');
-        newCell.style.height = "25px";
-        newCell.style.width = "25px";
-        newCell.dataset.index = i;
-
-        newGameBoard.appendChild(newCell);
-        // middleCell.style.backgroundColor = "green";
+        for (let cellsInRow = 0; cellsInRow < 20; cellsInRow++){
+            let newCell = document.createElement('td');
+            
+            newRow.appendChild(newCell);
+            
+            gameBoard[rowsInTable] = cellsInRow;
+        }
+    newGameBoard.appendChild(newRow);
     }
 
+    // create snake
 
-    
-
-    gameBoard.appendChild(newGameBoard);
-
-    newGameBoard.addEventListener('click', function(event){
-        console.log(event.target)
-        event.target.style.backgroundColor = "green";
-    })
-
-
-
-    function createSnake(event) {
-
-        console.log('reading create snake');
-        
-    }
-
-    createSnake();
-}
-
-/*
-create a game board of somewidth x someheight
-inside that game board, do we want a bunch of smaller divs,
-    do we just want the pixels to count as the game board,
-    or do we want to use a table of a set width and height?
-
-
-*/
-
-function createApple(){
-    let appleSpawn = Math.floor(Math.random() * gameSize.smallGame);
+    // let snakeColor = "green";
+    // let snakeSpawn = gameBoard[5][5];
+    // snakeSpawn.style.backgroundColor = snakeColor;
 
 }
 
-/*
-The snake
-could be an array of length x
-every time we eat an "apple"
-our snake grows by one
-
-if we hit a wall or another part of the snake,
-the game ends
-
-*/
-
-
-
-
-// calling our functions
 buildInitialState();
