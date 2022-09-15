@@ -45,16 +45,44 @@ function buildInitialState() {
             console.log(parseInt(newCell.dataset.index));
             
         }
-        console.log(gameBoard);
+        // console.log(gameBoard);
     newGameBoard.appendChild(newRow);
     }
 
     // create snake
 
-    // let snakeColor = "green";
-    // let snakeSpawn = gameBoard[5][5];
-    // snakeSpawn.style.backgroundColor = snakeColor;
+    let snakeColor = "green";
 
+    // start snake head at row 11 cell 11
+    let startRow = document.querySelector('tr[data-index="11"]');
+    console.log(startRow);
+    startRow.style.backgroundColor = "green";
+
+    let snakeHead = startRow.children[11];
+    snakeHead.style.backgroundColor = 'blue';
+    console.log(snakeHead);
+
+    let bodyRow = document.querySelector(('tr[data-index="12"]'));
+    let bodyRow2 = document.querySelector(('tr[data-index="13"]'));
+    
+    let body1 = bodyRow.children[11];
+    let body2 = bodyRow2.children[11];
+    body1.style.backgroundColor = "blue";
+    body2.style.backgroundColor = 'blue';
+    
+
+    let randomSpot;
+    let allRows = document.querySelectorAll('tr');
+    let randomAppleRow = Math.ceil(Math.random() * allRows.length);
+    console.log(randomAppleRow);
+    let randomAppleCell = Math.ceil(Math.random() * randomAppleRow);
+    console.log((randomAppleCell));
+
+    
 }
 
 buildInitialState();
+
+function drawApple() {
+
+}
