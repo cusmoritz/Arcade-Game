@@ -31,17 +31,21 @@ function buildInitialState() {
     for (let rowsInTable = 1; rowsInTable < 21; rowsInTable++){
         let newRow = document.createElement('tr');
         // gameBoard[rowsInTable] = rowsInTable;
+        newRow.dataset.index = rowsInTable
 
         for (let cellsInRow = 1; cellsInRow < 21; cellsInRow++){
             let newCell = document.createElement('td');
+            newCell.dataset.index = cellsInRow;
 
-            Object.values(rowsInTable) = newCell;
+            // Object.values(rowsInTable) = newCell;
             // gameBoard[rowsInTable] = newCell;
             
             newRow.appendChild(newCell);
             
-            // console.log(newCell.dataset.index);
+            console.log(parseInt(newCell.dataset.index));
+            
         }
+        console.log(gameBoard);
     newGameBoard.appendChild(newRow);
     }
 
