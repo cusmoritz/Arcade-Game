@@ -36,3 +36,7 @@
   table {
     border: dashed;
   }
+
+  .snake {
+    background-color: blue;
+  }

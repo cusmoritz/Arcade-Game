@@ -54,35 +54,71 @@ function buildInitialState() {
     let snakeColor = "green";
 
     // start snake head at row 11 cell 11
-    let startRow = document.querySelector('tr[data-index="11"]');
-    console.log(startRow);
-    startRow.style.backgroundColor = "green";
+    let startRow = document.querySelector('tr[data-index="11"]'); // get snake head location
+    // console.log(startRow);
+    // startRow.style.backgroundColor = "green";
 
-    let snakeHead = startRow.children[11];
+    let snakeHead = startRow.children[11]; // snake head location
     snakeHead.style.backgroundColor = 'blue';
-    console.log(snakeHead);
+    // console.log(snakeHead);
 
-    let bodyRow = document.querySelector(('tr[data-index="12"]'));
+    let bodyRow = document.querySelector(('tr[data-index="12"]')); // body cells
     let bodyRow2 = document.querySelector(('tr[data-index="13"]'));
     
-    let body1 = bodyRow.children[11];
+    let body1 = bodyRow.children[11]; // create / color body cells
     let body2 = bodyRow2.children[11];
     body1.style.backgroundColor = "blue";
     body2.style.backgroundColor = 'blue';
     
-
-    let randomSpot;
+    // create apple
+    let randomSpot; 
     let allRows = document.querySelectorAll('tr');
     let randomAppleRow = Math.ceil(Math.random() * allRows.length);
-    console.log(randomAppleRow);
+    console.log("randomapplerow", randomAppleRow);
     let randomAppleCell = Math.ceil(Math.random() * randomAppleRow);
-    console.log((randomAppleCell));
-
+    console.log("randomapple cell", randomAppleCell);
     
+
+    let appleRow = document.querySelector("tr[data-index=randomAppleRow]");
+    // let appleCell = appleRow.children[randomAppleCell];
+    // console.log(appleRow);
+    // console.log(appleCell);
+    // appleCell.style.backgroundColor = "red";
+
 }
 
 buildInitialState();
 
 function drawApple() {
+
+}
+
+// event listeners *************************
+let keys = {
+    up: 38,
+    down: 40,
+    left: 37,
+    right: 39
+}
+
+
+let body = document.getElementById("body");
+body.addEventListener("keydown", function(event){
+
+    if (event.key = 38){
+        // if Arrow Up is pressed, run move up function
+
+    } else if ( event.key = 40){
+    // if Arrow Down is pressed 
+
+    } else if (event.key = 37){
+    // if Arrow Left
+
+    } else {
+    // if Arrow Right
+    }
+})
+
+function moveUp(){
 
 }
