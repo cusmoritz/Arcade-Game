@@ -24,6 +24,8 @@ function tick() {
     gameState.time = gameState.time + 1;
     // console.log(gameState.time);
     timerScore();
+    timer();
+    scoreCounter();
 }
 
 function buildInitialState() {
@@ -189,11 +191,23 @@ window.addEventListener("keydown", function(event){
 
 // if gamestate.time = 20/40/60/80... increment score by 1
 function timerScore(){
-    let timer = document.getElementById('timer');
-    timer.innerText = gameState.time;
     if ((gameState.time % 20) == 0){
         gameState.score = gameState.score + 1;
     } else {
         return;
     }
+}
+
+function timer(){
+    let timer = document.getElementById('timer');
+    timer.innerText = gameState.time;
+}
+
+function scoreCounter(){
+    let scorer = document.getElementById('score');
+    scorer.innerHTML = `
+    Score: 
+    <span>
+    ${gameState.score}
+    </span>`
 }
