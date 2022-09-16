@@ -10,17 +10,22 @@ let snake = {
 
 let gameState = {
 apple: [11, 8],
-eaten: true,
+eaten: false,
 snake: snake,
-score: 0
+score: 0,
+time: 0
 }
 
-// window.setInterval(tick, 250);
+// window.setInterval(tick, 200);
 
 function tick() {
     moveSnake(snake.nextDirection);
     appleEaten();
-
+    gameState.time = gameState.time + 1;
+    // console.log(gameState.time);
+    timerScore();
+    console.log(gameState.score);
+    // if gamestate.time = 10/20/30/40 increment score by 1
 }
 
 function buildInitialState() {
@@ -40,11 +45,10 @@ function buildInitialState() {
     newGameBoard.appendChild(newRow);
     }
 
-    buildSnake();
+    colorSnake();
 
     drawApple();
 
-    // moveSnake(snake.nextDirection);
 }
 
 buildInitialState();
@@ -79,22 +83,19 @@ function moveSnake(array){
 
     snake.body.shift();
 
-    buildSnake();
+    colorSnake();
 
     // check if the apple was eaten after each move
     appleEaten();
 }
 
-function buildSnake (){ // styles each snake cell with "snake"
+function colorSnake (){ // styles each snake cell with "snake"
     snake.body.forEach(element => {
         newGameBoard.children[element[0]].children[element[1]].classList = "snake";
     })
 
-    if (gameState.eaten = false){
-        return;
-    } else {
-        removeTail();
-    }
+    removeTail();
+
 }
 
 function removeTail(){ // removes "snake" class from first 'snake' array elem.
@@ -104,6 +105,8 @@ function removeTail(){ // removes "snake" class from first 'snake' array elem.
 }
 
 function drawApple() {
+
+    gameState.eaten = false;
 
     //random apple row and cell
     let randomRow = Math.ceil(Math.random() * newGameBoard.children.length);
@@ -132,14 +135,26 @@ function appleEaten(){
         gameState.score = gameState.score + 10;
         // and adds 10 to the score
         console.log('score', gameState.score);
+        gameState.eaten = true;
 
         drawApple();
 
         // we also need to make the snake array 1 cell longer
+            // push current coordinates of snake tail into snake.body array
+        snake.body.push();
 
     } else {
+        // gameState.eaten = false;
         return;
     }
+
+    // // if the apple was eaten, add another segment
+    // if (gameState.eaten = true){
+    //     // snake.body.push(newSegment);
+    //     gameState.eaten = false;
+    // } else {
+    //     return;
+    // }
 
 }
 
@@ -149,27 +164,35 @@ window.addEventListener("keydown", function(event){
         // console.log('movin up');
         snake.nextDirection = [-1, 0];
         // moveSnake(snake.nextDirection);
-        console.log("snake dir", snake.nextDirection);
+        // console.log("snake dir", snake.nextDirection);
 
     } else if (keyPress == "ArrowDown" || keyPress == "s"){ // move the snake down
         // console.log('movin down');
         snake.nextDirection = [1, 0];
         // moveSnake(snake.nextDirection);
-        console.log("snake dir", snake.nextDirection);
+        // console.log("snake dir", snake.nextDirection);
 
     } else if (keyPress == "ArrowLeft" || keyPress == "a"){ // move the snake left
         // console.log('movin left');
         snake.nextDirection = [0, -1];
         // moveSnake(snake.nextDirection);
-        console.log("snake dir", snake.nextDirection);
+        // console.log("snake dir", snake.nextDirection);
 
     } else if (keyPress == "ArrowRight" || keyPress == "d"){ // move the snake right
         // console.log('movin right');
         snake.nextDirection = [0, 1];
         // moveSnake(snake.nextDirection);
-        console.log("snake dir", snake.nextDirection);
+        // console.log("snake dir", snake.nextDirection);
 
     } else {
         return; // we are only looking for the arrow keys here
     }
 })
+
+function timerScore(){
+    if ((gameState.time % 20) == 0){
+        gameState.score = gameState.score + 1;
+    } else {
+        return;
+    }
+}
