@@ -30,6 +30,8 @@ let snake = {
     }
 
     buildSnake();
+
+    drawApple();
 }
 
 buildInitialState();
@@ -83,14 +85,22 @@ function render(){
 
 function drawApple() {
 
-    //random apple row and column
-    let newAppleRow = Math.ceil(Math.random() * newGameBoard.children.length);
-    console.log(newGameBoard.children);
-    let newAppleCell = Math.ceil(Math.random() * newGameBoard.querySelectorAll());
-    console.log(newAppleCell);
+    //random apple row and cell
+    let randomRow = Math.ceil(Math.random() * newGameBoard.children.length);
+    let newAppleCell = Math.ceil(Math.random() * randomRow);
 
-    let appleSpawn = gameState.apple;
+    // put random row and cell in apple array
+    gameState.apple[0] = randomRow;
+    gameState.apple[1] = newAppleCell
 
+    // console.log(gameState.apple);
+    gameState.apple.forEach(element => {
+        newGameBoard.children[gameState.apple[0]].children[gameState.apple[1]].classList = "apple"; // put the random apple on the board
+    })
 }
 
-drawApple();
+newGameBoard.addEventListener("keydown", function(event){
+    if (event.key = 38){
+        console.log('movin up');
+    }
+})
