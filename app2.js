@@ -2,6 +2,7 @@ const siteBody = document.getElementsByName('body');
 const gameLayout = document.getElementById('gamePlusScore'); // game field
 let newGameBoard = document.createElement('table'); // playing field
 let scoreboard = document.getElementById('score'); // get score elem
+let sidebar = document.getElementById('sidebar');
 
 let snake = {
     body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
@@ -29,6 +30,14 @@ function tick() {
 }
 
 function buildInitialState() {
+
+    // console.log(sidebar);
+
+    // let startButton = document.createElement('button');
+    // console.log(startButton);
+    // startButton.innerText = "start";
+    // sidebar.appendChild("startButton");
+
     gameLayout.appendChild(newGameBoard);
 
     // create 20 rows with 20 cells each
@@ -130,33 +139,34 @@ function drawApple() {
 }
 
 function appleEaten(){
+    // this checks if the head of our snake == the apple coordinates
     if (snake.body[snake.body.length - 1][0] == gameState.apple[0] && snake.body[snake.body.length - 1][1] == gameState.apple[1]) {
-        // this checks if the head of our snake == the apple coordinates
-        gameState.score = gameState.score + 10;
-        // and adds 10 to the score
-        console.log('score', gameState.score);
+
         gameState.eaten = true;
+
+        // and adds 5 to the score if we eat an apple
+        gameState.score = gameState.score + 5;
+
+        console.log('score', gameState.score);
+
+        addTail();
 
         drawApple();
 
         // we also need to make the snake array 1 cell longer
             // push current coordinates of snake tail into snake.body array
-        snake.body.push();
+        // let newSegment = [newGameBoard.children[snake.body[0][0]].value, newGameBoard.children[snake.body[0]].children[snake.body[1]]];
+        // console.log(newSegment);
+
+        // let newTail = snake.body.length + 1;
+        // snake.body.newTail.push();
 
     } else {
         // gameState.eaten = false;
         return;
     }
-
-    // // if the apple was eaten, add another segment
-    // if (gameState.eaten = true){
-    //     // snake.body.push(newSegment);
-    //     gameState.eaten = false;
-    // } else {
-    //     return;
-    // }
-
 }
+
 
 window.addEventListener("keydown", function(event){
     let keyPress = event.key;
@@ -198,11 +208,13 @@ function timerScore(){
     }
 }
 
+// add time to time element
 function timer(){
     let timer = document.getElementById('timer');
     timer.innerText = gameState.time;
 }
 
+// add score to score element
 function scoreCounter(){
     let scorer = document.getElementById('score');
     scorer.innerHTML = `
@@ -210,4 +222,8 @@ function scoreCounter(){
     <span>
     ${gameState.score}
     </span>`
+}
+
+function addTail(){
+    snake.body.unshift(snake.body[0])
 }
