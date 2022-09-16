@@ -1,15 +1,25 @@
 const siteBody = document.getElementsByName('body');
 const gameLayout = document.getElementById('gamePlusScore'); // game field
 let newGameBoard = document.createElement('table'); // playing field
+let scoreboard = document.getElementById('score'); // get score elem
 
 let snake = {
     body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
-    nextDirection: [1, 0]
+    nextDirection: [0, 1]
 }
 
 let gameState = {
 apple: [11, 8],
-snake: snake 
+eaten: true,
+snake: snake,
+score: 0
+}
+
+// window.setInterval(tick, 250);
+
+function tick() {
+    moveSnake(snake.nextDirection);
+    appleEaten();
 
 }
 
@@ -33,11 +43,25 @@ function buildInitialState() {
     buildSnake();
 
     drawApple();
+
+    // moveSnake(snake.nextDirection);
 }
 
 buildInitialState();
 
+// fucntion for timing
+    // tick
+    // build snake
+        // every second we want to continue to move the snake
+            // (moving the snake redraws the snake body and eliminates the tail)
+            // cant move the snake rn because there is no input array 
+            // every 1000 ticks increment score by 1
+    // spawn apple (?)
+
+
 function moveSnake(array){
+
+    // gameState.nextDirection = array;
 
     // we need to use array[num, num]
     // up = [-1, 0] == key 38
@@ -55,33 +79,29 @@ function moveSnake(array){
 
     snake.body.shift();
 
-    // newSegment.classList = "snake";
-
     buildSnake();
-    removeTail();
 
-    console.log(snake.body);
-
+    // check if the apple was eaten after each move
+    appleEaten();
 }
 
 function buildSnake (){ // styles each snake cell with "snake"
     snake.body.forEach(element => {
         newGameBoard.children[element[0]].children[element[1]].classList = "snake";
     })
+
+    if (gameState.eaten = false){
+        return;
+    } else {
+        removeTail();
+    }
 }
 
 function removeTail(){ // removes "snake" class from first 'snake' array elem.
     let snakeTail = snake.body[0];
-    console.log("snakeTail", snakeTail);
+    // console.log("snakeTail", snakeTail);
     newGameBoard.children[snakeTail[0]].children[snakeTail[1]].classList.remove("snake");
 }
-
-    // tick
-    // build snake
-        // remove background color from tail
-        // add background color to head
-    // spawn apple (?)
-
 
 function drawApple() {
 
@@ -106,30 +126,47 @@ function drawApple() {
         // randomApple(squares);
 }
 
+function appleEaten(){
+    if (snake.body[snake.body.length - 1][0] == gameState.apple[0] && snake.body[snake.body.length - 1][1] == gameState.apple[1]) {
+        // this checks if the head of our snake == the apple coordinates
+        gameState.score = gameState.score + 10;
+        // and adds 10 to the score
+        console.log('score', gameState.score);
+
+        drawApple();
+
+        // we also need to make the snake array 1 cell longer
+
+    } else {
+        return;
+    }
+
+}
+
 window.addEventListener("keydown", function(event){
     let keyPress = event.key;
     if (keyPress == "ArrowUp" || keyPress == "w"){ // move the snake up
         // console.log('movin up');
         snake.nextDirection = [-1, 0];
-        moveSnake(snake.nextDirection);
+        // moveSnake(snake.nextDirection);
         console.log("snake dir", snake.nextDirection);
 
     } else if (keyPress == "ArrowDown" || keyPress == "s"){ // move the snake down
         // console.log('movin down');
         snake.nextDirection = [1, 0];
-        moveSnake(snake.nextDirection);
+        // moveSnake(snake.nextDirection);
         console.log("snake dir", snake.nextDirection);
 
     } else if (keyPress == "ArrowLeft" || keyPress == "a"){ // move the snake left
         // console.log('movin left');
         snake.nextDirection = [0, -1];
-        moveSnake(snake.nextDirection);
+        // moveSnake(snake.nextDirection);
         console.log("snake dir", snake.nextDirection);
 
     } else if (keyPress == "ArrowRight" || keyPress == "d"){ // move the snake right
         // console.log('movin right');
         snake.nextDirection = [0, 1];
-        moveSnake(snake.nextDirection);
+        // moveSnake(snake.nextDirection);
         console.log("snake dir", snake.nextDirection);
 
     } else {
