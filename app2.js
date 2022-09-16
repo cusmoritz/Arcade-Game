@@ -3,6 +3,8 @@ const gameLayout = document.getElementById('gamePlusScore'); // game field
 let newGameBoard = document.createElement('table'); // playing field
 let scoreboard = document.getElementById('score'); // get score elem
 let sidebar = document.getElementById('sidebar');
+let startButton = document.getElementById('start');
+let pauseButton = document.getElementById('pause');
 
 let snake = {
     body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
@@ -14,10 +16,20 @@ apple: [11, 8],
 eaten: false,
 snake: snake,
 score: 0,
-time: 0
+time: 0,
+applecounter: 0,
+gameRunning: startGame(false)
 }
 
-// window.setInterval(tick, 200);
+// let ticker = window.setInterval(tick, 200);
+
+function startGame(boolean) {
+    if (boolean === true){ // if we click start, the tick function begins
+        window.setInterval(tick, 200);
+    } else { // if we click pause, the tick function should stop running
+        window.clearInterval(tick); // we will come back to this
+    }
+}
 
 function tick() {
     moveSnake(snake.nextDirection);
@@ -28,6 +40,15 @@ function tick() {
     timer();
     scoreCounter();
 }
+
+startButton.addEventListener('click', function(){
+    startGame(true);
+});
+
+pauseButton.addEventListener('click', function(){
+    startGame(false);
+    gameOver();
+})
 
 function buildInitialState() {
 
@@ -119,7 +140,7 @@ function drawApple() {
 
     //random apple row and cell
     let randomRow = Math.ceil(Math.random() * newGameBoard.children.length);
-    let newAppleCell = Math.ceil(Math.random() * randomRow);
+    let newAppleCell = Math.ceil(Math.random() * newGameBoard.children[0].children.length);
 
     // put random row and cell in apple array
     gameState.apple[0] = randomRow;
@@ -129,6 +150,14 @@ function drawApple() {
         // if snake.body[snake.body.length - 1][0] = randomRow && snake.body[snake.body.length - 1][1] = newAppleCell
             // then respawn apple
             // else return
+
+    // check to see if the apple spawns in the body of the snake
+        // we could use a loop to fire through every x and y  of the snake body
+        // this would be dynamic as our snake could get bigger and still work
+        // or we could make it not spawn in the snake in the first place?
+
+    
+
 
     gameState.apple.forEach(element => {
         newGameBoard.children[gameState.apple[0]].children[gameState.apple[1]].classList = "apple"; // put the random apple on the board
@@ -143,6 +172,7 @@ function appleEaten(){
     if (snake.body[snake.body.length - 1][0] == gameState.apple[0] && snake.body[snake.body.length - 1][1] == gameState.apple[1]) {
 
         gameState.eaten = true;
+        gameState.applecounter = gameState.applecounter + 1;
 
         // and adds 5 to the score if we eat an apple
         gameState.score = gameState.score + 5;
@@ -152,6 +182,8 @@ function appleEaten(){
         addTail();
 
         drawApple();
+
+        console.log(snake.body.length);
 
         // we also need to make the snake array 1 cell longer
             // push current coordinates of snake tail into snake.body array
@@ -226,4 +258,8 @@ function scoreCounter(){
 
 function addTail(){
     snake.body.unshift(snake.body[0])
+}
+
+function gameOver() {
+    alert(`Good game! Your final score was ${gameState.score}, you ate ${gameState.applecounter} apples, and you survived for ${gameState.time / 4} seconds`);
 }
