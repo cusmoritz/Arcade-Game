@@ -43,35 +43,39 @@ function buildSnake (){
     })
 }
 
-function moveSnake(){
+function moveSnake(array){
 
-    let direction = [1,0];
+    // we need to use array[num, num]
     // up = [-1, 0] == key 38
     // down = [1, 0] == key 40
     // right = [0, 1] == key 39
     // left = [-1, 0] == key 37
 
-    let newSegment = [(snake.body[snake.body.length - 1][0] + direction[0]), (snake.body[snake.body.length - 1][1] + direction[1])];
-    console.log(newSegment);
+    let newSegment = [(snake.body[snake.body.length - 1][0] + array[0]), (snake.body[snake.body.length - 1][1] + array[1])];
+    // console.log(newSegment);
 
-    newSegment.classList = "snake";
-    
+    // let snakeTail = snake.body.shift();
+    // snakeTail.classList.remove("snake");
+
+    let snakeTail = snake.body[0];
+
     snake.body.push(newSegment);
 
     snake.body.shift();
 
-    console.log(snake.body);
+    // newSegment.classList = "snake";
 
-    colorSnake();
+    buildSnake();
+    removeTail();
+
+    console.log(snake.body);
 
 }
 
-moveSnake();
-
-function colorSnake() {
-    snake.body.forEach(element => {
-        element.classList = "snake";
-    })
+function removeTail(){
+    let snakeTail = snake.body[0];
+    console.log("snakeTail", snakeTail);
+    newGameBoard.children[snakeTail[0]].children[snakeTail[1]].classList.remove("snake");
 }
 
 function render(){
@@ -93,14 +97,40 @@ function drawApple() {
     gameState.apple[0] = randomRow;
     gameState.apple[1] = newAppleCell
 
+    // we can use these to check if the apple has been eaten =>
+        // if snake.body[snake.body.length - 1][0] = randomRow && snake.body[snake.body.length - 1][1] = newAppleCell
+            // then respawn apple
+            // else return
+
     // console.log(gameState.apple);
     gameState.apple.forEach(element => {
         newGameBoard.children[gameState.apple[0]].children[gameState.apple[1]].classList = "apple"; // put the random apple on the board
     })
+
+    // would this work?
+        // let squares = document.querySelectorAll("newgameBoard td");
+        // randomApple(squares);
 }
 
-newGameBoard.addEventListener("keydown", function(event){
-    if (event.key = 38){
+window.addEventListener("keydown", function(event){
+    let keyPress = event.key;
+    if (keyPress == "ArrowUp"){ // move the snake up
         console.log('movin up');
+        moveSnake([-1, 0]);
+
+    } else if (keyPress == "ArrowDown"){ // move the snake down
+        console.log('movin down');
+        moveSnake([1, 0]);
+
+    } else if (keyPress == "ArrowLeft"){ // move the snake left
+        console.log('movin left');
+        moveSnake([0, -1]);
+
+    } else if (keyPress == "ArrowRight"){ // move the snake right
+        console.log('movin right');
+        moveSnake([0, 1]);
+
+    } else {
+        return; // we are only looking for the arrow keys here
     }
 })
