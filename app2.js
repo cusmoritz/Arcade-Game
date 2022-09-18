@@ -7,8 +7,11 @@ let scoreboard = document.getElementById('score'); // get score elem
 let sidebar = document.getElementById('sidebar');
 let startButton = document.getElementById('start');
 let pauseButton = document.getElementById('pause');
-let selector = document.getElementById('select');
-let highScore = document.createElement('span');
+let highScoreEl = document.createElement('span');
+let timerEl = document.getElementById('timer');
+const resetButton = document.getElementById('reset');
+let gameOverText = document.createElement('p');
+
 
 let snake = {
     body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
@@ -16,7 +19,7 @@ let snake = {
 }
 
 let gameState = {
-apple: [5, 15],
+apple: [10, 5],
 eaten: false,
 snake: snake,
 score: 0,
@@ -26,16 +29,13 @@ applecounter: 0,
 gameRunning: false,
 size: 20,
 ticker: 200,
-large: 50,
-medium: 30,
-small: 20
 }
 
 function buildInitialState() {
 
-    gameState.gameRunning = false;
-
     gameLayout.appendChild(newGameBoard);
+
+    newGameBoard.innerText = "";
 
     for (let rowsInTable = 0; rowsInTable < gameState.size; rowsInTable++){
         // create rows
@@ -54,7 +54,7 @@ function buildInitialState() {
 }
 
 buildInitialState();
-scoreboard.after(highScore);
+scoreStatic.after(highScoreEl);
 colorSnake();
 createApple();
 
@@ -65,26 +65,24 @@ createApple();
     // call game over function
 
 function startGame(){
-        if (gameState.gameRunning === true){
-            ticker();
-            render();
-        } else {
-            
-            gameOver();
-            // break;
-        }
+    if (gameState.gameRunning == true){
+        ticker();
+        render();
+    } else {
+    // break;
+    }
 }
 
 function ticker() {
-    console.log('tick');
+    // console.log('tick');
     moveSnake();
     appleEaten();
-    // need to add our wall collision tests to ticker
     collisionWalls();
+    // need to add snake self-collision
 }
 
 function render() {
-    console.log('render');
+    // console.log('render');
     colorSnake();
     timer();
 }
@@ -94,6 +92,7 @@ function render() {
 function moveSnake(){ // updates the snake array with snake.direction
     let newSegment = [(snake.body[snake.body.length - 1][0] + snake.nextDirection[0]), (snake.body[snake.body.length - 1][1] + snake.nextDirection[1])];
     snake.body.push(newSegment);
+    snakeCollision();
     removeTail();
  }
 
@@ -110,7 +109,8 @@ function createApple() {
     let newAppleCell = Math.floor(Math.random() * newGameBoard.children[0].children.length);
     // put random row and cell in apple array
     gameState.apple[0] = randomRow;
-    gameState.apple[1] = newAppleCell
+    gameState.apple[1] = newAppleCell;
+    appleCollision();
     drawApple();
 }
 
@@ -135,21 +135,68 @@ function addTail(){
 
 function collisionWalls() {
     let snakeHead = (snake.body.at(-1));
-    console.log(snakeHead);
+    // console.log(snakeHead);
 
     // let snake = {
     //     body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
 
     if ((snakeHead[0] < 0) || (snakeHead[0] >= gameState.size)){
+        gameState.gameRunning = false;
         gameOver(); // check to make sure the snake is inside the game board width
         console.log('ded height');
     }
 
     if ((snakeHead[1] < 0) || (snakeHead[1] >= gameState.size)){
+        gameState.gameRunning = false;
         gameOver(); // check to make sure snake is within height of game
         console.log('ded width');
     }
 }
+
+function appleCollision() {
+    let appleCoord = gameState.apple;
+
+    for (let i = 0; i < snake.body.length; i++){ // loops through snake.body
+        for (let j = 0; j < 2; j++){ // loop through snake.body[i]
+            if (appleCoord[0] === snake.body[i][j] && appleCoord[1] === snake.body[i][j]){ // loop thru snake.body[i][j]
+                createApple();
+                console.log(`APPLE HIT at ${snake.body[i]}`);
+            }
+        }
+    }
+}
+
+function snakeCollision() {
+    let snakeHead = (snake.body.at(-1));
+
+    //     snake.body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
+    //      snakeHead:                              [10, 8]
+
+
+    for (let i = 0; i < snake.body.length-1; i++){ // loop through each snake.body
+
+        for (let k = 0; k < 2; k++){
+            for (let j = 1; j < 2; j++){
+                console.log('snake body i and k ', snake.body[i][k]);
+                console.log('snake body i and j', snake.body[i][j]);
+                if ((snakeHead[0] == snake.body[i][k]) && (snakeHead[1] == snake.body[i][k][j])){
+                    console.log('snakehead', snakeHead);
+                    gameOver();
+                }
+
+            }
+
+        }
+
+    }
+
+
+
+
+}
+
+
+
 
 
 // ************************** RENDER FUNCTIONS ***********************
@@ -160,9 +207,7 @@ function colorSnake (){ // styles each snake cell with "snake"
 }
 
 function drawApple(){ // colors apple from gamestate.apple coordinates
-    gameState.apple.forEach(element => {
-        newGameBoard.children[gameState.apple[0]].children[gameState.apple[1]].classList = "apple"; // put the random apple on the board
-    })
+    newGameBoard.children[gameState.apple[0]].children[gameState.apple[1]].classList = "apple"; // put the random apple on the board    
 }
 
 function timerScore(){ // if gamestate.time = 20/40/60/80...  score + 1
@@ -173,19 +218,14 @@ function timerScore(){ // if gamestate.time = 20/40/60/80...  score + 1
 }
 
 function timer(){ // add time to time element
-    let timer = document.getElementById('timer');
-    timer.innerText = gameState.time;
+    timerEl.innerText = gameState.time;
     gameState.time = gameState.time + 1;
     timerScore();
 }
 
 function scoreCounter(){ // add score to score element
     let scorer = document.getElementById('score');
-    scorer.innerHTML = `
-    Score: 
-    <span>
-    ${gameState.score}
-    </span>`
+    scorer.innerHTML = gameState.score;
 }
 
 
@@ -193,15 +233,55 @@ function scoreCounter(){ // add score to score element
 startButton.addEventListener('click', function(){
     gameState.gameRunning = true;
     window.setInterval(startGame, gameState.ticker);
+    window.clearInterval(startGame, gameState.ticker);
 });
 
-selector.addEventListener('click', function(){
-    selector.dropodown.style.display = "block";
+let largeGame = document.getElementById('large');
+largeGame.addEventListener('click', function(){
+    gameState.size = 40;
+    buildInitialState();
+    colorSnake();
+    createApple();
+})
+
+let mediumGame = document.getElementById('medium');
+mediumGame.addEventListener('click', function(){
+    gameState.size = 30;
+    buildInitialState();
+    colorSnake();
+    createApple();
+})
+
+let smallGame = document.getElementById('small');
+smallGame.addEventListener('click', function(){
+    gameState.size = 20;
+    buildInitialState();
+    colorSnake();
+    createApple();
+})
+
+resetButton.addEventListener('click', function(){
+    gameState.gameRunning = false;
+    buildInitialState();
+    snake.body = [ [10, 5], [10, 6], [10, 7], [10, 8] ];
+    snake.nextDirection = [0, 1];
+    gameState.score = 0;
+    gameState.time = 0;
+    gameState.applecounter = 0;
+    colorSnake();
+    createApple();
+    scoreboard.innerText = "";
+    timerEl.innerText = "";
+    gameOverText.innerText = "";
 })
 
 pauseButton.addEventListener('click', function(){
-    gameState.gameRunning = false;
-    gameState.ticker = null;
+    if (gameState.gameRunning = true){
+        gameState.gameRunning = false;
+    } else {
+        gameState.gameRunning = true; // this should restart play ... 
+        startGame(); // but it's not
+    };
 })
 
 window.addEventListener("keydown", function(event){
@@ -221,18 +301,22 @@ window.addEventListener("keydown", function(event){
     }
 })
 
-
 function gameOver() {
-    alert(`Good game! Your final score was ${gameState.score}, you ate ${gameState.applecounter} apples, and you survived for ${Math.trunc(gameState.time / 6)} seconds`);
 
-    // let highScoreText = highScore.innerText;
+    gameState.gameRunning = false;
+
+    // sets our new highscore if there is one to the field / object
     if (gameState.score > gameState.highscore){
         gameState.highscore = gameState.score;
 
-        highScore.innerText = `Highscore: ${gameState.highscore}`;
+        highScoreEl.innerText = `Highscore: ${gameState.highscore}`;
 
         console.log(gameState.highscore);
     }
 
     window.clearInterval(gameState.ticker);
+
+    gameOverText.innerText = `Good game! Your final score was ${gameState.score}, you ate ${gameState.applecounter} apples, and you survived for ${Math.trunc(gameState.time / 6)} seconds`
+
+    newGameBoard.after(gameOverText);
 }

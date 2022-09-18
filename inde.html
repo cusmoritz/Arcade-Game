@@ -22,20 +22,26 @@
         <p>Press start to begin.</p>
         <p>Arrow keys and 'WASD' control the snake movement.</p>
         <p>Apples will make your snake longer.</p>
-        <p>Walls do <i>not</i> wrap.</p>
+        <p>Watch out for walls!</p>
 
         <button id="start">Start</button>
         <button id="pause">Pause</button>
-        <select id="select">Game Size</select>
+
+        <button id="large">Large</button>
+        <button id="medium">Medium</button>
+        <button id="small">Small</button>
+        <button id="reset">Reset</button>
+        
     </sidebar>
 
 
     <main id="gamePlusScore">
         
-        <p id="score">Score: </p>
+        <p id="scoreStatic">Score: <span id="score"></span></p>
         <p>Time: <span id="timer"></span></p>
 
     </main>
+
     
 </body>
 <script src="app2.js"></script>

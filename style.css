@@ -20,12 +20,19 @@
     text-align: center;
     font-size: x-small;
   }
+  main {
+    /* display: flex; */
+    justify-content: center;
+    align-items: center;
+  }
+  main span {
+    text-align: center;
+    font-size:medium;
+  }
 
-  main div {
-    display: flex;
-    flex-wrap: wrap;
-    height: 5px;
-    width: 5px;
+  main p {
+    text-align: center;
+    font-size:medium;
   }
 
   td {
