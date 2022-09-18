@@ -7,6 +7,8 @@ let scoreboard = document.getElementById('score'); // get score elem
 let sidebar = document.getElementById('sidebar');
 let startButton = document.getElementById('start');
 let pauseButton = document.getElementById('pause');
+let selector = document.getElementById('select');
+let highScore = document.createElement('span');
 
 let snake = {
     body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
@@ -18,10 +20,15 @@ apple: [5, 15],
 eaten: false,
 snake: snake,
 score: 0,
+highscore: 0,
 time: 0,
 applecounter: 0,
 gameRunning: false,
 size: 20,
+ticker: 200,
+large: 50,
+medium: 30,
+small: 20
 }
 
 function buildInitialState() {
@@ -43,9 +50,11 @@ function buildInitialState() {
     // add rows to board
     newGameBoard.appendChild(newRow);
     }
+
 }
 
 buildInitialState();
+scoreboard.after(highScore);
 colorSnake();
 createApple();
 
@@ -60,16 +69,22 @@ function startGame(){
             ticker();
             render();
         } else {
+            
             gameOver();
+            // break;
         }
 }
 
 function ticker() {
+    console.log('tick');
     moveSnake();
     appleEaten();
+    // need to add our wall collision tests to ticker
+    collisionWalls();
 }
 
 function render() {
+    console.log('render');
     colorSnake();
     timer();
 }
@@ -118,6 +133,24 @@ function addTail(){
     snake.body.unshift(snake.body[0]);
 }
 
+function collisionWalls() {
+    let snakeHead = (snake.body.at(-1));
+    console.log(snakeHead);
+
+    // let snake = {
+    //     body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
+
+    if ((snakeHead[0] < 0) || (snakeHead[0] >= gameState.size)){
+        gameOver(); // check to make sure the snake is inside the game board width
+        console.log('ded height');
+    }
+
+    if ((snakeHead[1] < 0) || (snakeHead[1] >= gameState.size)){
+        gameOver(); // check to make sure snake is within height of game
+        console.log('ded width');
+    }
+}
+
 
 // ************************** RENDER FUNCTIONS ***********************
 function colorSnake (){ // styles each snake cell with "snake"
@@ -159,11 +192,16 @@ function scoreCounter(){ // add score to score element
 // ************************* EVENT LISTENERS *************
 startButton.addEventListener('click', function(){
     gameState.gameRunning = true;
-    window.setInterval(startGame, 200);
+    window.setInterval(startGame, gameState.ticker);
 });
+
+selector.addEventListener('click', function(){
+    selector.dropodown.style.display = "block";
+})
 
 pauseButton.addEventListener('click', function(){
     gameState.gameRunning = false;
+    gameState.ticker = null;
 })
 
 window.addEventListener("keydown", function(event){
@@ -187,23 +225,14 @@ window.addEventListener("keydown", function(event){
 function gameOver() {
     alert(`Good game! Your final score was ${gameState.score}, you ate ${gameState.applecounter} apples, and you survived for ${Math.trunc(gameState.time / 6)} seconds`);
 
-    window.clearInterval(timeTicker);
-}
+    // let highScoreText = highScore.innerText;
+    if (gameState.score > gameState.highscore){
+        gameState.highscore = gameState.score;
 
-function collisionWalls() {
-    let snakeHead = (snake.body[snake.body.length - 1]);
-    console.log(snakeHead);
+        highScore.innerText = `Highscore: ${gameState.highscore}`;
 
-    // let snake = {
-    //     body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
-
-    if ((snakeHead[0] < 0) || (snakeHead[0] > gameState.size)){
-        gameOver(); // check to make sure the snake is inside the game board width
-        console.log('ded height');
+        console.log(gameState.highscore);
     }
 
-    if ((snakeHead[1] < 0) || (snakeHead[1] > gameState.size)){
-        gameOver(); // check to make sure snake is within height of game
-        console.log('ded width');
-    }
+    window.clearInterval(gameState.ticker);
 }
