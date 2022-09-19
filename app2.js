@@ -31,6 +31,8 @@ size: 20,
 ticker: 200,
 }
 
+let tickerSpeed = 200;
+
 function buildInitialState() {
 
     gameLayout.appendChild(newGameBoard);
@@ -73,6 +75,7 @@ function startGame(){
     }
 }
 
+
 function ticker() {
     // console.log('tick');
     moveSnake();
@@ -92,7 +95,13 @@ function render() {
 function moveSnake(){ // updates the snake array with snake.direction
     let newSegment = [(snake.body[snake.body.length - 1][0] + snake.nextDirection[0]), (snake.body[snake.body.length - 1][1] + snake.nextDirection[1])];
     snake.body.push(newSegment);
-    snakeCollision();
+    
+    for (let i = 0; i < snake.body.length-2; i++){
+        if (snake.body[i][0] == newSegment[0] && snake.body[i][1] == newSegment[1]){
+            gameOver();
+        }
+    }
+
     removeTail();
  }
 
@@ -166,41 +175,9 @@ function appleCollision() {
     }
 }
 
-function snakeCollision() {
-    let snakeHead = (snake.body.at(-1));
-
-    //     snake.body: [ [10, 5], [10, 6], [10, 7], [10, 8] ],
-    //      snakeHead:                              [10, 8]
-
-
-    for (let i = 0; i < snake.body.length-1; i++){ // loop through each snake.body
-
-        for (let k = 0; k < 2; k++){
-            for (let j = 1; j < 2; j++){
-                console.log('snake body i and k ', snake.body[i][k]);
-                console.log('snake body i and j', snake.body[i][j]);
-                if ((snakeHead[0] == snake.body[i][k]) && (snakeHead[1] == snake.body[i][k][j])){
-                    console.log('snakehead', snakeHead);
-                    gameOver();
-                }
-
-            }
-
-        }
-
-    }
-
-
-
-
-}
-
-
-
-
 
 // ************************** RENDER FUNCTIONS ***********************
-function colorSnake (){ // styles each snake cell with "snake"
+function colorSnake() { // styles each snake cell with "snake"
     snake.body.forEach(element => {
         newGameBoard.children[element[0]].children[element[1]].classList = "snake";
     })
@@ -232,8 +209,7 @@ function scoreCounter(){ // add score to score element
 // ************************* EVENT LISTENERS *************
 startButton.addEventListener('click', function(){
     gameState.gameRunning = true;
-    window.setInterval(startGame, gameState.ticker);
-    window.clearInterval(startGame, gameState.ticker);
+    window.setInterval(startGame, tickerSpeed);
 });
 
 let largeGame = document.getElementById('large');
@@ -262,6 +238,7 @@ smallGame.addEventListener('click', function(){
 
 resetButton.addEventListener('click', function(){
     gameState.gameRunning = false;
+
     buildInitialState();
     snake.body = [ [10, 5], [10, 6], [10, 7], [10, 8] ];
     snake.nextDirection = [0, 1];
@@ -313,8 +290,6 @@ function gameOver() {
 
         console.log(gameState.highscore);
     }
-
-    window.clearInterval(gameState.ticker);
 
     gameOverText.innerText = `Good game! Your final score was ${gameState.score}, you ate ${gameState.applecounter} apples, and you survived for ${Math.trunc(gameState.time / 6)} seconds`
 
