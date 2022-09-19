@@ -205,6 +205,7 @@ function scoreCounter(){ // add score to score element
 // ************************* EVENT LISTENERS *************
 startButton.addEventListener('click', function(){
     gameState.gameRunning = true;
+    clearInterval(intervalTimer);
     intervalTimer = setInterval(startGame, gameState.ticker);
 });
 
@@ -235,11 +236,13 @@ smallGame.addEventListener('click', function(){
 const fasterButton = document.getElementById('faster');
 fasterButton.addEventListener('click', function(){
     // this is where I code that the ticker function increases
+    gameState.ticker = 150;
 })
 
 const fastestButton = document.getElementById('fastest');
 fastestButton.addEventListener('click', function(){
     // this is where I code that the ticker function increases even more
+    gameState.ticker = 100;
 })
 
 resetButton.addEventListener('click', function(){
@@ -265,6 +268,7 @@ pauseButton.addEventListener('click', function(){
     } else {
         gameState.gameRunning = true; // this should restart play ... 
         intervalTimer = setInterval(startGame, gameState.ticker);; // but it's not
+        intervalTimer;
     };
 })
 
